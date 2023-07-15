@@ -9,6 +9,6 @@ public class HomeController {
 
     @GetMapping("/api/hello")
     public String helloWorld() {
-        return "Hello world CI/CD test";
+        return "Hello world CI/CD test!!";
     }
 }
