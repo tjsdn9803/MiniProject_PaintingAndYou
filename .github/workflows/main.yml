@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
     
 env:
-  PROJECT_NAME: moduform_project
+  PROJECT_NAME: cicdtest
   BUCKET_NAME: tjsdn9803-cicd-bucket
   CODE_DEPLOY_APP_NAME: tjsdn9803_cicd
   DEPLOYMENT_GROUP_NAME: tjsdn9803-instance
