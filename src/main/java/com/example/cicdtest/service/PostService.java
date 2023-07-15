@@ -7,6 +7,8 @@ import com.example.cicdtest.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -17,6 +19,9 @@ public class PostService {
         Post post = new Post(postRequestDto);
         PostResponseDto postResponseDto = new PostResponseDto(postRepository.save(post));
         return postResponseDto;
+    }
 
+    public List<PostResponseDto> getPosts() {
+        return postRepository.findAll().stream().map(PostResponseDto::new).toList();
     }
 }
