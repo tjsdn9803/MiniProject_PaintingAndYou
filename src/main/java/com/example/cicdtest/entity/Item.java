@@ -31,4 +31,5 @@ public class Item extends TimeStamped{
         this.title = itemRequestDto.getTitle();
         this.content = itemRequestDto.getContent();
     }
+
 }
