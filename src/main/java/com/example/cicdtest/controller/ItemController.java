@@ -46,6 +46,13 @@ public class ItemController {
                 .body(Result.success("수정 성공"));
     }
 
+    @PatchMapping("/api/item/{itemId}")
+    public ResponseEntity<Result> updateItemPatch(@PathVariable Long itemId, @RequestBody ItemRequestDto itemRequestDto){
+        itemService.updateItemPatch(itemId, itemRequestDto);
+        return ResponseEntity.ok()
+                .body(Result.success("수정 성공"));
+    }
+
     @DeleteMapping("/api/item/{itemId}")
     private ResponseEntity<Result> deleteItem(@PathVariable Long itemId){
         itemService.deleteItem(itemId);
