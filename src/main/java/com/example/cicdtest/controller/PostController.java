@@ -4,15 +4,13 @@ import com.example.cicdtest.dto.PostRequestDto;
 import com.example.cicdtest.dto.PostResponseDto;
 import com.example.cicdtest.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "https://localhost:3000")
 public class PostController {
 
     private final PostService postService;
@@ -26,4 +24,5 @@ public class PostController {
     private List<PostResponseDto> getPosts(){
         return postService.getPosts();
     }
+
 }
