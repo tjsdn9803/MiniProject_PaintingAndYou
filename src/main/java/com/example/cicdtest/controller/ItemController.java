@@ -19,6 +19,7 @@ public class ItemController {
 
     @PostMapping("/api/item")
     private ResponseEntity<Result> createItem(@RequestBody ItemRequestDto itemRequestDto){
+        System.out.println(itemRequestDto.getContent());
         itemService.createItem(itemRequestDto);
         return ResponseEntity.ok()
                 .body(Result.success("생성 성공"));

@@ -21,6 +21,7 @@ public class Item extends TimeStamped{
 
     public Item(ItemRequestDto itemRequestDto) {
         this.title = itemRequestDto.getTitle();
+        this.content = itemRequestDto.getContent();
     }
 
 

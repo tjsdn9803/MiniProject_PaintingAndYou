@@ -17,8 +17,10 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     public boolean createItem(ItemRequestDto itemRequestDto) {
+        System.out.println("itemRequestDto.getTitle() = " + itemRequestDto.getTitle());
         Item item = new Item(itemRequestDto);
-        ItemResponseDto itemResponseDto = new ItemResponseDto(itemRepository.save(item));
+        System.out.println("item.getContent() = " + item.getContent());
+        itemRepository.save(item);
         return true;
     }
 
