@@ -16,7 +16,7 @@ public class Item extends TimeStamped{
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 512)
     private String content;
 
     public Item(ItemRequestDto itemRequestDto) {
