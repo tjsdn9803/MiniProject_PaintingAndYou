@@ -7,6 +7,7 @@ import com.example.cicdtest.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,9 +19,15 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping("/api/item")
-    private ResponseEntity<Result> createItem(@RequestBody ItemRequestDto itemRequestDto){
-        System.out.println(itemRequestDto.getContent());
-        itemService.createItem(itemRequestDto);
+    private ResponseEntity<Result> createItem(
+            @RequestPart("data") ItemRequestDto itemRequestDto,
+            @RequestPart(required = false) MultipartFile image) {
+        try{
+            itemService.createItem(itemRequestDto, image);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(Result.error(e.getMessage()));
+        }
         return ResponseEntity.ok()
                 .body(Result.success("생성 성공"));
     }

@@ -7,7 +7,9 @@ import com.example.cicdtest.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +18,18 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final S3Upload s3Upload;
 
-    public boolean createItem(ItemRequestDto itemRequestDto) {
-        System.out.println("itemRequestDto.getTitle() = " + itemRequestDto.getTitle());
-        Item item = new Item(itemRequestDto);
-        System.out.println("item.getContent() = " + item.getContent());
+    public boolean createItem(ItemRequestDto itemRequestDto, MultipartFile image) {
+        String imagePath = null;
+        if(!image.isEmpty()){
+            try{
+                imagePath = s3Upload.uploadFiles(image, "images");
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        Item item = new Item(itemRequestDto, imagePath);
         itemRepository.save(item);
         return true;
     }

@@ -21,11 +21,14 @@ public class Item extends TimeStamped{
     @Column(nullable = false, length = 512)
     private String content;
 
-    public Item(ItemRequestDto itemRequestDto) {
+    @Column
+    private String imagePath;
+
+    public Item(ItemRequestDto itemRequestDto, String imagePath) {
         this.title = itemRequestDto.getTitle();
         this.content = itemRequestDto.getContent();
+        this.imagePath = imagePath;
     }
-
 
     public void updateItem(ItemRequestDto itemRequestDto) {
         this.title = itemRequestDto.getTitle();

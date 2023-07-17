@@ -21,7 +21,7 @@ public class S3Controller {
                     .body("파일이 유효하지 않습니다.");
         }
         try {
-            s3Upload.upload(multipartFile, "static");
+            s3Upload.uploadFiles(multipartFile, "static");
             return ResponseEntity.ok()
                     .body("파일이 성공적으로 저장되었습니다.");
         } catch (Exception e){
