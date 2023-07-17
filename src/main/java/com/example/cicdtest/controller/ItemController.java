@@ -50,7 +50,7 @@ public class ItemController {
     private ResponseEntity<Result> deleteItem(@PathVariable Long itemId){
         itemService.deleteItem(itemId);
         return ResponseEntity.ok()
-                .body(Result.success("수정 성공"));
+                .body(Result.success("삭제 성공"));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
