@@ -28,10 +28,17 @@ public class ItemService {
             }catch (Exception e) {
                 e.printStackTrace();
             }
+            Item item = new Item(itemRequestDto, imagePath);
+            item.setContent("image is not empty");
+            itemRepository.save(item);
+            return true;
+        }else{
+            Item item = new Item(itemRequestDto, imagePath);
+            item.setContent("image is not empty");
+            itemRepository.save(item);
+            return true;
         }
-        Item item = new Item(itemRequestDto, imagePath);
-        itemRepository.save(item);
-        return true;
+
     }
 
     public List<ItemResponseDto> getItems() {
