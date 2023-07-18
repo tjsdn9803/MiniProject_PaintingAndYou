@@ -25,7 +25,10 @@ public class ItemService {
             try{
                 imagePath = s3Upload.uploadFiles(image, "images");
             }catch (Exception e) {
-                e.printStackTrace();
+                String errorMsg = e.getMessage();
+                Item item = new Item(itemRequestDto, imagePath);
+                item.setContent(errorMsg);
+                return new ItemResponseDto(item);
             }
             Item item = new Item(itemRequestDto, imagePath);
             item.setContent("image is not empty");
