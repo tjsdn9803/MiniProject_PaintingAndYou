@@ -34,7 +34,7 @@ public class ItemService {
             return true;
         }else{
             Item item = new Item(itemRequestDto, imagePath);
-            item.setContent("image is not empty");
+            item.setContent("image is empty");
             itemRepository.save(item);
             return true;
         }
