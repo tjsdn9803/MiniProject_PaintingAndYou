@@ -23,13 +23,13 @@ public class ItemController {
             @RequestPart("data") ItemRequestDto itemRequestDto,
             @RequestPart(required = false) MultipartFile image) {
         try{
-            itemService.createItem(itemRequestDto, image);
-        } catch (Exception e) {
+            ItemResponseDto item = itemService.createItem(itemRequestDto, image);
+            return ResponseEntity.ok()
+                    .body(Result.success(item));
+        }catch (Exception e){
             return ResponseEntity.badRequest()
                     .body(Result.error(e.getMessage()));
         }
-        return ResponseEntity.ok()
-                .body(Result.success("생성 성공"));
     }
 
     @GetMapping("/api/item")

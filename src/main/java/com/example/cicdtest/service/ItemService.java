@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final S3Upload s3Upload;
 
-    public boolean createItem(ItemRequestDto itemRequestDto, MultipartFile image) {
+    public ItemResponseDto createItem(ItemRequestDto itemRequestDto, MultipartFile image) {
         String imagePath = null;
         if(!image.isEmpty()){
             try{
@@ -30,13 +29,14 @@ public class ItemService {
             }
             Item item = new Item(itemRequestDto, imagePath);
             item.setContent("image is not empty");
-            itemRepository.save(item);
-            return true;
+            Item save = itemRepository.save(item);
+            return new ItemResponseDto(save);
         }else{
             Item item = new Item(itemRequestDto, imagePath);
             item.setContent("image is empty");
-            itemRepository.save(item);
-            return true;
+            Item save = itemRepository.save(item);
+            return new ItemResponseDto(save);
+
         }
 
     }
