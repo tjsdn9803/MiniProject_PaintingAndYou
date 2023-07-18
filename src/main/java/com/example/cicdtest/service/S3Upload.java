@@ -67,7 +67,6 @@ public class S3Upload {
             }
             return Optional.of(convertFile);
         }
-        System.out.println(1);
         return Optional.empty();
     }
 }

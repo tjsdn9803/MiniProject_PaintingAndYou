@@ -24,24 +24,16 @@ public class ItemService {
         if(!image.isEmpty()){
             try{
                 imagePath = s3Upload.uploadFiles(image, "images");
-            }catch (Exception e) {
-                String errorMsg = e.getMessage();
-                Item item = new Item(itemRequestDto, imagePath);
-                item.setContent(errorMsg);
-                return new ItemResponseDto(item);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Item item = new Item(itemRequestDto, e.getMessage());
+                Item save = itemRepository.save(item);
+                return new ItemResponseDto(save);
             }
-            Item item = new Item(itemRequestDto, imagePath);
-            item.setContent("image is not empty");
-            Item save = itemRepository.save(item);
-            return new ItemResponseDto(save);
-        }else{
-            Item item = new Item(itemRequestDto, imagePath);
-            item.setContent("image is empty");
-            Item save = itemRepository.save(item);
-            return new ItemResponseDto(save);
-
         }
-
+        Item item = new Item(itemRequestDto, imagePath);
+        Item save = itemRepository.save(item);
+        return new ItemResponseDto(save);
     }
 
     public List<ItemResponseDto> getItems() {
