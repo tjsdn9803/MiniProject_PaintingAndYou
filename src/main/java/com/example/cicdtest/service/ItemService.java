@@ -19,21 +19,17 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final S3Upload s3Upload;
 
-    public ItemResponseDto createItem(ItemRequestDto itemRequestDto, MultipartFile image) {
+    public void createItem(ItemRequestDto itemRequestDto, MultipartFile image) {
         String imagePath = null;
         if(!image.isEmpty()){
             try{
                 imagePath = s3Upload.uploadFiles(image, "images");
             } catch (Exception e) {
                 e.printStackTrace();
-                Item item = new Item(itemRequestDto, e.getMessage());
-                Item save = itemRepository.save(item);
-                return new ItemResponseDto(save);
             }
         }
         Item item = new Item(itemRequestDto, imagePath);
-        Item save = itemRepository.save(item);
-        return new ItemResponseDto(save);
+        itemRepository.save(item);
     }
 
     public List<ItemResponseDto> getItems() {
@@ -45,34 +41,26 @@ public class ItemService {
     }
 
     @Transactional
-    public boolean updateItem(Long itemId, ItemRequestDto itemRequestDto) {
+    public void updateItem(Long itemId, ItemRequestDto itemRequestDto) {
         Item item = findItem(itemId);
         item.updateItem(itemRequestDto);
-        return true;
     }
 
     @Transactional
     public void updateItemPatch(Long itemId, ItemRequestDto itemRequestDto) {
         Item item = findItem(itemId);
-        List<ItemRequestDto> itemRequestDtoList = new ArrayList<>();
-        itemRequestDtoList.add(itemRequestDto);
-
-        for(int i = 0 ; i < itemRequestDtoList.size(); i++){
-            if(itemRequestDtoList.get(i).getContent() != null) item.setContent(itemRequestDtoList.get(i).getContent());
-            if(itemRequestDtoList.get(i).getTitle() != null) item.setTitle(itemRequestDtoList.get(i).getTitle());
-        }
+        if(itemRequestDto.getContent() != null) item.setContent(itemRequestDto.getContent());
+        if(itemRequestDto.getTitle() != null) item.setTitle(itemRequestDto.getTitle());
     }
 
-    public boolean deleteItem(Long itemId) {
+    public void deleteItem(Long itemId) {
         Item item = findItem(itemId);
         itemRepository.delete(item);
-        return true;
     }
 
     public Item findItem(Long itemId) {
         return itemRepository.findById(itemId).orElseThrow(()->
                 new IllegalArgumentException("해당 id에 해당하는 아이템이 존재하지 않습니다."));
     }
-
 
 }
