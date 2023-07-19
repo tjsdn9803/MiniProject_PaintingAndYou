@@ -5,6 +5,9 @@ import com.example.cicdtest.dto.ItemResponseDto;
 import com.example.cicdtest.entity.Item;
 import com.example.cicdtest.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,4 +85,9 @@ public class ItemService {
                 new IllegalArgumentException("해당 id에 해당하는 아이템이 존재하지 않습니다."));
     }
 
+    public Page<ItemResponseDto> getItemsInfiniteScroll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Item> itemList = itemRepository.findAll(pageable);
+        return itemList.map(ItemResponseDto::new);
+    }
 }

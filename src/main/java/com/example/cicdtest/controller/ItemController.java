@@ -5,6 +5,7 @@ import com.example.cicdtest.dto.ItemResponseDto;
 import com.example.cicdtest.dto.Result;
 import com.example.cicdtest.service.ItemService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,6 +38,13 @@ public class ItemController {
         ItemResponseDto item = itemService.getItem(itemId);
         return ResponseEntity.ok()
                 .body(Result.success(item));
+    }
+
+    @GetMapping("/api/item/scroll")
+    private ResponseEntity<Result> getItemsInfiniteScroll(int page, int size){
+        Page<ItemResponseDto> itemsInfiniteScroll = itemService.getItemsInfiniteScroll(page-1, size);
+        return ResponseEntity.ok()
+                .body(Result.success(itemsInfiniteScroll));
     }
 
     @PutMapping("/api/item/{itemId}")
