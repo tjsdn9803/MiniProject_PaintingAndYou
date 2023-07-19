@@ -22,7 +22,6 @@ public class UserService {
 
     public void signup(SignupRequestDto requestDto) {
         String username = requestDto.getUsername();
-        System.out.println("requestDto.getPassword() = " + requestDto.getPassword());
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         // 회원 중복 확인

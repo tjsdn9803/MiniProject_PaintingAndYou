@@ -41,8 +41,8 @@ public class ItemController {
     }
 
     @GetMapping("/api/item/scroll")
-    private ResponseEntity<Result> getItemsInfiniteScroll(int page, int size){
-        Page<ItemResponseDto> itemsInfiniteScroll = itemService.getItemsInfiniteScroll(page-1, size);
+    private ResponseEntity<Result> getItemsInfiniteScroll(int page, int size, boolean isAsc){
+        Page<ItemResponseDto> itemsInfiniteScroll = itemService.getItemsInfiniteScroll(page-1, size, isAsc);
         return ResponseEntity.ok()
                 .body(Result.success(itemsInfiniteScroll));
     }

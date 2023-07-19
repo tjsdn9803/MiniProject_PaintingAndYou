@@ -30,4 +30,10 @@ public class UserController {
                 .body(Result.success("회원가입 성공"));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Result> exceptionHandler(Exception e){
+        return ResponseEntity.badRequest()
+                .body(Result.error(e.getMessage()));
+    }
+
 }

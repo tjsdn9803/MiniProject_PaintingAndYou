@@ -1,8 +1,10 @@
 package com.example.cicdtest.controller;
 
+import com.example.cicdtest.dto.Result;
 import com.example.cicdtest.service.S3Upload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,5 +30,11 @@ public class S3Controller {
             return ResponseEntity.badRequest()
                     .body(e.getMessage());
         }
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Result> exceptionHandler(Exception e){
+        return ResponseEntity.badRequest()
+                .body(Result.error(e.getMessage()));
     }
 }
