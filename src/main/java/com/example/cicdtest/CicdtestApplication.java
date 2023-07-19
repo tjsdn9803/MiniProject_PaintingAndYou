@@ -20,7 +20,7 @@ public class CicdtestApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://paintings-and-you.s3-website.ap-northeast-2.amazonaws.com");
+                registry.addMapping("/**").allowedOrigins("http://paintings-and-you.s3-website.ap-northeast-2.amazonaws.com", "http://localhost:3000");
             }
         };
     }
