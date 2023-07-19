@@ -27,7 +27,7 @@ public class WebSecurityConfig {
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
-//    private final CorsConfig corsConfig;
+    private final CorsConfig corsConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -53,9 +53,9 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http.csrf((csrf) -> csrf.disable());
         // CSRF 설정
-        http.cors((corsConfig)-> corsConfig.disable());
+        http.csrf((csrf) -> csrf.disable());
+
         // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -75,6 +75,8 @@ public class WebSecurityConfig {
                 formLogin
                         .loginPage("/api/user/login-page").permitAll()
         );
+
+        http.addFilter(corsConfig.corsFilter());// ** CorsFilter 등록 **
 
         // 필터 관리
         http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
