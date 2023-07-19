@@ -24,10 +24,8 @@ public class ItemController {
 
     @PostMapping("/api/item")
     private ResponseEntity<Result> createItem(@RequestPart("data") ItemRequestDto itemRequestDto,
-                                              @RequestPart(required = false) MultipartFile image,
-                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        itemService.createItem(itemRequestDto, image, user);
+                                              @RequestPart(required = false) MultipartFile image) {
+        itemService.createItem(itemRequestDto, image);
         return ResponseEntity.ok()
                 .body(Result.success("생성 성공"));
     }
@@ -56,10 +54,8 @@ public class ItemController {
     @PutMapping("/api/item/{itemId}")
     private ResponseEntity<Result> updateItem(@PathVariable Long itemId,
                                               @RequestPart("data") ItemRequestDto itemRequestDto,
-                                              @RequestPart(required = false) MultipartFile image,
-                                              @AuthenticationPrincipal UserDetailsImpl userDetails){
-        User user = userDetails.getUser();
-        itemService.updateItem(itemId, itemRequestDto, image, user);
+                                              @RequestPart(required = false) MultipartFile image){
+        itemService.updateItem(itemId, itemRequestDto, image);
         return ResponseEntity.ok()
                 .body(Result.success("수정 성공"));
     }
@@ -67,19 +63,15 @@ public class ItemController {
     @PatchMapping("/api/item/{itemId}")
     public ResponseEntity<Result> updateItemPatch(@PathVariable Long itemId,
                                                   @RequestPart(value = "data", required = false) ItemRequestDto itemRequestDto,
-                                                  @RequestPart(required = false) MultipartFile image,
-                                                  @AuthenticationPrincipal UserDetailsImpl userDetails){
-        User user = userDetails.getUser();
-        itemService.updateItemPatch(itemId, itemRequestDto, image, user);
+                                                  @RequestPart(required = false) MultipartFile image){
+        itemService.updateItemPatch(itemId, itemRequestDto, image);
         return ResponseEntity.ok()
                 .body(Result.success("수정 성공"));
     }
 
     @DeleteMapping("/api/item/{itemId}")
-    private ResponseEntity<Result> deleteItem(@PathVariable Long itemId,
-                                              @AuthenticationPrincipal UserDetailsImpl userDetails){
-        User user = userDetails.getUser();
-        itemService.deleteItem(itemId, user);
+    private ResponseEntity<Result> deleteItem(@PathVariable Long itemId){
+        itemService.deleteItem(itemId);
         return ResponseEntity.ok()
                 .body(Result.success("삭제 성공"));
     }

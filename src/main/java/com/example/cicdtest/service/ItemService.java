@@ -24,7 +24,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final S3Upload s3Upload;
 
-    public void createItem(ItemRequestDto itemRequestDto, MultipartFile image, User user) {
+    public void createItem(ItemRequestDto itemRequestDto, MultipartFile image) {
         String imagePath = null;
         if(!image.isEmpty()){
             try{
@@ -33,7 +33,7 @@ public class ItemService {
                 e.printStackTrace();
             }
         }
-        Item item = new Item(itemRequestDto, imagePath, user);
+        Item item = new Item(itemRequestDto, imagePath);
         itemRepository.save(item);
     }
 
@@ -54,11 +54,8 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateItem(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image, User user) {
+    public void updateItem(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image) {
         Item item = findItem(itemId);
-        if(!item.getUser().getId().equals(user.getId())){
-            throw new IllegalArgumentException("회원님이 작성하지 않은 글을 수정할 수 없습니다.");
-        }
         String imagePath = item.getImagePath();
         if(!image.isEmpty()){
             try{
@@ -71,11 +68,8 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateItemPatch(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image, User user) {
+    public void updateItemPatch(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image) {
         Item item = findItem(itemId);
-        if(!item.getUser().getId().equals(user.getId())){
-            throw new IllegalArgumentException("회원님이 작성하지 않은 글을 수정할 수 없습니다.");
-        }
         if(itemRequestDto != null){
             if(itemRequestDto.getContent() != null) item.setContent(itemRequestDto.getContent());
             if(itemRequestDto.getTitle() != null) item.setTitle(itemRequestDto.getTitle());
@@ -91,11 +85,8 @@ public class ItemService {
         }
     }
 
-    public void deleteItem(Long itemId, User user) {
+    public void deleteItem(Long itemId) {
         Item item = findItem(itemId);
-        if(!item.getUser().getId().equals(user.getId())){
-            throw new IllegalArgumentException("회원님이 작성하지 않은 글을 삭제할 수 없습니다.");
-        }
         itemRepository.delete(item);
     }
 

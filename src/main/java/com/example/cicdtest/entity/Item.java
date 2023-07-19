@@ -29,11 +29,10 @@ public class Item extends TimeStamped{
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Item(ItemRequestDto itemRequestDto, String imagePath, User user) {
+    public Item(ItemRequestDto itemRequestDto, String imagePath) {
         this.title = itemRequestDto.getTitle();
         this.content = itemRequestDto.getContent();
         this.imagePath = imagePath;
-        this.user = user;
     }
 
     public void updateItem(ItemRequestDto itemRequestDto, String imagePath) {
