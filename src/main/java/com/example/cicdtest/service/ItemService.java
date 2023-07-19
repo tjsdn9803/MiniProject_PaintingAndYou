@@ -3,6 +3,7 @@ package com.example.cicdtest.service;
 import com.example.cicdtest.dto.ItemRequestDto;
 import com.example.cicdtest.dto.ItemResponseDto;
 import com.example.cicdtest.entity.Item;
+import com.example.cicdtest.entity.User;
 import com.example.cicdtest.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final S3Upload s3Upload;
 
-    public void createItem(ItemRequestDto itemRequestDto, MultipartFile image) {
+    public void createItem(ItemRequestDto itemRequestDto, MultipartFile image, User user) {
         String imagePath = null;
         if(!image.isEmpty()){
             try{
@@ -32,7 +33,7 @@ public class ItemService {
                 e.printStackTrace();
             }
         }
-        Item item = new Item(itemRequestDto, imagePath);
+        Item item = new Item(itemRequestDto, imagePath, user);
         itemRepository.save(item);
     }
 
@@ -44,9 +45,20 @@ public class ItemService {
         return new ItemResponseDto(findItem(itemId));
     }
 
+    public Page<ItemResponseDto> getItemsInfiniteScroll(int page, int size, boolean isAsc) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, "id");
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Item> itemList = itemRepository.findAll(pageable);
+        return itemList.map(ItemResponseDto::new);
+    }
+
     @Transactional
-    public void updateItem(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image) {
+    public void updateItem(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image, User user) {
         Item item = findItem(itemId);
+        if(!item.getUser().getId().equals(user.getId())){
+            throw new IllegalArgumentException("회원님이 작성하지 않은 글을 수정할 수 없습니다.");
+        }
         String imagePath = item.getImagePath();
         if(!image.isEmpty()){
             try{
@@ -59,8 +71,11 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateItemPatch(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image) {
+    public void updateItemPatch(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image, User user) {
         Item item = findItem(itemId);
+        if(!item.getUser().getId().equals(user.getId())){
+            throw new IllegalArgumentException("회원님이 작성하지 않은 글을 수정할 수 없습니다.");
+        }
         if(itemRequestDto != null){
             if(itemRequestDto.getContent() != null) item.setContent(itemRequestDto.getContent());
             if(itemRequestDto.getTitle() != null) item.setTitle(itemRequestDto.getTitle());
@@ -76,21 +91,16 @@ public class ItemService {
         }
     }
 
-    public void deleteItem(Long itemId) {
+    public void deleteItem(Long itemId, User user) {
         Item item = findItem(itemId);
+        if(!item.getUser().getId().equals(user.getId())){
+            throw new IllegalArgumentException("회원님이 작성하지 않은 글을 삭제할 수 없습니다.");
+        }
         itemRepository.delete(item);
     }
 
     public Item findItem(Long itemId) {
         return itemRepository.findById(itemId).orElseThrow(()->
                 new IllegalArgumentException("해당 id에 해당하는 아이템이 존재하지 않습니다."));
-    }
-
-    public Page<ItemResponseDto> getItemsInfiniteScroll(int page, int size, boolean isAsc) {
-        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
-        Sort sort = Sort.by(direction, "id");
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Item> itemList = itemRepository.findAll(pageable);
-        return itemList.map(ItemResponseDto::new);
     }
 }

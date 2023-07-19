@@ -3,10 +3,13 @@ package com.example.cicdtest.controller;
 import com.example.cicdtest.dto.ItemRequestDto;
 import com.example.cicdtest.dto.ItemResponseDto;
 import com.example.cicdtest.dto.Result;
+import com.example.cicdtest.entity.User;
+import com.example.cicdtest.security.UserDetailsImpl;
 import com.example.cicdtest.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,8 +23,11 @@ public class ItemController {
     private final ItemService itemService;
 
     @PostMapping("/api/item")
-    private ResponseEntity<Result> createItem(@RequestPart("data") ItemRequestDto itemRequestDto, @RequestPart(required = false) MultipartFile image) {
-        itemService.createItem(itemRequestDto, image);
+    private ResponseEntity<Result> createItem(@RequestPart("data") ItemRequestDto itemRequestDto,
+                                              @RequestPart(required = false) MultipartFile image,
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        itemService.createItem(itemRequestDto, image, user);
         return ResponseEntity.ok()
                 .body(Result.success("생성 성공"));
     }
@@ -48,22 +54,32 @@ public class ItemController {
     }
 
     @PutMapping("/api/item/{itemId}")
-    private ResponseEntity<Result> updateItem(@PathVariable Long itemId, @RequestPart("data") ItemRequestDto itemRequestDto, @RequestPart(required = false) MultipartFile image){
-        itemService.updateItem(itemId, itemRequestDto, image);
+    private ResponseEntity<Result> updateItem(@PathVariable Long itemId,
+                                              @RequestPart("data") ItemRequestDto itemRequestDto,
+                                              @RequestPart(required = false) MultipartFile image,
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        itemService.updateItem(itemId, itemRequestDto, image, user);
         return ResponseEntity.ok()
                 .body(Result.success("수정 성공"));
     }
 
     @PatchMapping("/api/item/{itemId}")
-    public ResponseEntity<Result> updateItemPatch(@PathVariable Long itemId, @RequestPart(value = "data", required = false) ItemRequestDto itemRequestDto, @RequestPart(required = false) MultipartFile image){
-        itemService.updateItemPatch(itemId, itemRequestDto, image);
+    public ResponseEntity<Result> updateItemPatch(@PathVariable Long itemId,
+                                                  @RequestPart(value = "data", required = false) ItemRequestDto itemRequestDto,
+                                                  @RequestPart(required = false) MultipartFile image,
+                                                  @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        itemService.updateItemPatch(itemId, itemRequestDto, image, user);
         return ResponseEntity.ok()
                 .body(Result.success("수정 성공"));
     }
 
     @DeleteMapping("/api/item/{itemId}")
-    private ResponseEntity<Result> deleteItem(@PathVariable Long itemId){
-        itemService.deleteItem(itemId);
+    private ResponseEntity<Result> deleteItem(@PathVariable Long itemId,
+                                              @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        itemService.deleteItem(itemId, user);
         return ResponseEntity.ok()
                 .body(Result.success("삭제 성공"));
     }
