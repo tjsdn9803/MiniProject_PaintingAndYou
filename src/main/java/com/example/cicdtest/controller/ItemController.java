@@ -40,15 +40,15 @@ public class ItemController {
     }
 
     @PutMapping("/api/item/{itemId}")
-    private ResponseEntity<Result> updateItem(@PathVariable Long itemId, @RequestBody ItemRequestDto itemRequestDto){
-        itemService.updateItem(itemId, itemRequestDto);
+    private ResponseEntity<Result> updateItem(@PathVariable Long itemId, @RequestPart("data") ItemRequestDto itemRequestDto, @RequestPart(required = false) MultipartFile image){
+        itemService.updateItem(itemId, itemRequestDto, image);
         return ResponseEntity.ok()
                 .body(Result.success("수정 성공"));
     }
 
     @PatchMapping("/api/item/{itemId}")
-    public ResponseEntity<Result> updateItemPatch(@PathVariable Long itemId, @RequestBody ItemRequestDto itemRequestDto){
-        itemService.updateItemPatch(itemId, itemRequestDto);
+    public ResponseEntity<Result> updateItemPatch(@PathVariable Long itemId, @RequestPart(value = "data", required = false) ItemRequestDto itemRequestDto, @RequestPart(required = false) MultipartFile image){
+        itemService.updateItemPatch(itemId, itemRequestDto, image);
         return ResponseEntity.ok()
                 .body(Result.success("수정 성공"));
     }

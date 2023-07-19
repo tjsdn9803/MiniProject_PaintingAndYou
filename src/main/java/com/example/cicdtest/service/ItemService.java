@@ -41,16 +41,35 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateItem(Long itemId, ItemRequestDto itemRequestDto) {
+    public void updateItem(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image) {
         Item item = findItem(itemId);
-        item.updateItem(itemRequestDto);
+        String imagePath = item.getImagePath();
+        if(!image.isEmpty()){
+            try{
+                imagePath = s3Upload.uploadFiles(image, "images");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        item.updateItem(itemRequestDto, imagePath);
     }
 
     @Transactional
-    public void updateItemPatch(Long itemId, ItemRequestDto itemRequestDto) {
+    public void updateItemPatch(Long itemId, ItemRequestDto itemRequestDto, MultipartFile image) {
         Item item = findItem(itemId);
-        if(itemRequestDto.getContent() != null) item.setContent(itemRequestDto.getContent());
-        if(itemRequestDto.getTitle() != null) item.setTitle(itemRequestDto.getTitle());
+        if(itemRequestDto != null){
+            if(itemRequestDto.getContent() != null) item.setContent(itemRequestDto.getContent());
+            if(itemRequestDto.getTitle() != null) item.setTitle(itemRequestDto.getTitle());
+        }
+        String imagePath = item.getImagePath();
+        if(image != null){
+            try{
+                imagePath = s3Upload.uploadFiles(image, "images");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            item.setImagePath(imagePath);
+        }
     }
 
     public void deleteItem(Long itemId) {

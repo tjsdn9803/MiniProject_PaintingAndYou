@@ -31,9 +31,10 @@ public class Item extends TimeStamped{
         this.imagePath = imagePath;
     }
 
-    public void updateItem(ItemRequestDto itemRequestDto) {
+    public void updateItem(ItemRequestDto itemRequestDto, String imagePath) {
         this.title = itemRequestDto.getTitle();
         this.content = itemRequestDto.getContent();
+        this.imagePath = imagePath;
     }
 
 }
