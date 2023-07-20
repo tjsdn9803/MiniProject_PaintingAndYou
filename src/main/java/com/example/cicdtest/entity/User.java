@@ -28,6 +28,9 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Item> item = new ArrayList<>();
+
     public User(String username, String password, String email, UserRoleEnum role) {
         this.username = username;
         this.password = password;

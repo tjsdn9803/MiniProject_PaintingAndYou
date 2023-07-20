@@ -54,11 +54,13 @@ public class UserService {
     }
 
     public String login(LoginRequestDto loginRequestDto) {
+        System.out.println(1);
         User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(()->
                 new IllegalArgumentException("가입되지 않은 이름"));
         if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
             throw new IllegalArgumentException("비밀번호가 틀립니다");
         }
+        System.out.println(2);
         return jwtUtil.createToken(user.getUsername(), user.getRole());
     }
 }
