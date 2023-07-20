@@ -1,5 +1,6 @@
 package com.example.cicdtest.controller;
 
+import com.example.cicdtest.dto.LoginRequestDto;
 import com.example.cicdtest.dto.Result;
 import com.example.cicdtest.dto.SignupRequestDto;
 import com.example.cicdtest.entity.UserRoleEnum;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserController {
@@ -29,6 +30,13 @@ public class UserController {
         return ResponseEntity.ok()
                 .body(Result.success("회원가입 성공"));
     }
+
+    @PostMapping("/user/login")
+    public String login(@RequestBody LoginRequestDto loginRequestDto){
+        return userService.login(loginRequestDto);
+    }
+
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Result> exceptionHandler(Exception e){

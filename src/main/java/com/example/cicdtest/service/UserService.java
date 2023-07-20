@@ -1,8 +1,10 @@
 package com.example.cicdtest.service;
 
+import com.example.cicdtest.dto.LoginRequestDto;
 import com.example.cicdtest.dto.SignupRequestDto;
 import com.example.cicdtest.entity.User;
 import com.example.cicdtest.entity.UserRoleEnum;
+import com.example.cicdtest.jwt.JwtUtil;
 import com.example.cicdtest.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
@@ -48,5 +51,16 @@ public class UserService {
         // 사용자 등록
         User user = new User(username, password, email, role);
         userRepository.save(user);
+    }
+
+    public String login(LoginRequestDto loginRequestDto) {
+        System.out.println(1);
+        User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(()->
+                new IllegalArgumentException("가입되지 않은 이름"));
+        if(!passwordEncoder.matches(loginRequestDto.getPassword(), user.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 틀립니다");
+        }
+        System.out.println(2);
+        return jwtUtil.createToken(user.getUsername(), user.getRole());
     }
 }
