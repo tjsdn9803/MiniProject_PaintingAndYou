@@ -22,8 +22,9 @@ public class CicdtestApplication {
             public void addCorsMappings(CorsRegistry registry) {
                 registry
                         .addMapping("/**")
-                        .allowedOrigins("*")
-                        .allowedMethods("*");
+                        .allowedOrigins("http://paintings-and-you.s3-website.ap-northeast-2.amazonaws.com")
+                        .allowedMethods("*")
+                        .allowCredentials(true);
             }
         };
     }
