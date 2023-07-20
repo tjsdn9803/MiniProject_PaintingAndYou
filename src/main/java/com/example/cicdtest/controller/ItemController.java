@@ -23,10 +23,8 @@ public class ItemController {
 
     @PostMapping("/api/item")
     private ResponseEntity<Result> createItem(@RequestPart("data") ItemRequestDto itemRequestDto,
-                                              @RequestPart(required = false) MultipartFile image,
-                                              @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
-        itemService.createItem(itemRequestDto, image, user);
+                                              @RequestPart(required = false) MultipartFile image) {
+        itemService.createItem(itemRequestDto, image);
         return ResponseEntity.ok()
                 .body(Result.success("생성 성공"));
     }
@@ -39,9 +37,8 @@ public class ItemController {
     }
 
     @GetMapping("/api/item/{itemId}")
-    private ResponseEntity<Result> getItem(@PathVariable Long itemId, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        User user = userDetails.getUser();
-        ItemResponseDto item = itemService.getItem(itemId, user);
+    private ResponseEntity<Result> getItem(@PathVariable Long itemId){
+        ItemResponseDto item = itemService.getItem(itemId);
         return ResponseEntity.ok()
                 .body(Result.success(item));
     }
@@ -78,7 +75,7 @@ public class ItemController {
                 .body(Result.success("삭제 성공"));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<Result> exceptionHandler(Exception e){
         return ResponseEntity.badRequest()
                 .body(Result.error(e.getMessage()));
