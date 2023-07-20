@@ -50,6 +50,12 @@ CodeDeploy는 S3에 있는 파일을 서버가 작동될 EC2로 옮기고 배포
     
     username, password, email을 입력하여 회원가입시 DB에 username, email, 암호화된 password를 저장하였고
     username, password를 이용하여 로그인 시 검증 절차를 걸친 뒤 JWT토큰을 발급
+
+
+## ERD
+
+
+![ex_screenshot](https://tjsdn9803-cicd-bucket.s3.ap-northeast-2.amazonaws.com/images/20230720_114146.jpg)
     
     
     
