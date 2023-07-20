@@ -30,6 +30,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDto.class);
+            response.addHeader("a", "b");
 
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -62,7 +63,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         String token = jwtUtil.createToken(username, role);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
-//        response.addHeader("Access-Control-Allow-Origin", "http://paintings-and-you.s3-website.ap-northeast-2.amazonaws.com");
     }
 
     @Override
