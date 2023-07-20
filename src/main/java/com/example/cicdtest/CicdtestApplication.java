@@ -23,6 +23,7 @@ public class CicdtestApplication {
                 registry
                         .addMapping("/**")
                         .allowedOrigins("http://paintings-and-you.s3-website.ap-northeast-2.amazonaws.com", "http://localhost:3000")
+//                        .exposedHeaders("Authorization")
                         .allowedMethods("*")
                         .allowCredentials(true);
             }
