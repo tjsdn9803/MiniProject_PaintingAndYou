@@ -3,6 +3,9 @@
 ------
 ### Back-end Application Of 'Painting And You'
 
+### 시연 영상
+<https://www.youtube.com/watch?v=cHCN78UOvNk>
+
 ### 기술 스택 및 개발 환경
 
 ![ex_screenshot](https://tjsdn9803-cicd-bucket.s3.ap-northeast-2.amazonaws.com/images/20230720_172659.jpg)
