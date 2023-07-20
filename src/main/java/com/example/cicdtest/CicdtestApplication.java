@@ -24,7 +24,8 @@ public class CicdtestApplication {
                         addMapping("/**")
                         .allowedOrigins("http://paintings-and-you.s3-website.ap-northeast-2.amazonaws.com", "http://localhost:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-                        .allowCredentials(false);
+                        .exposedHeaders("Authorization")
+                        .allowCredentials(true);
             }
         };
     }
