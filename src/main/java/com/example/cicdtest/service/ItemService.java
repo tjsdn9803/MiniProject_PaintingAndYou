@@ -24,7 +24,7 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final S3Upload s3Upload;
 
-    public void createItem(ItemRequestDto itemRequestDto, MultipartFile image) {
+    public void createItem(ItemRequestDto itemRequestDto, MultipartFile image, User user) {
         String imagePath = null;
         if(!image.isEmpty()){
             try{
@@ -33,7 +33,7 @@ public class ItemService {
                 e.printStackTrace();
             }
         }
-        Item item = new Item(itemRequestDto, imagePath);
+        Item item = new Item(itemRequestDto, imagePath, user);
         itemRepository.save(item);
     }
 
@@ -41,8 +41,12 @@ public class ItemService {
         return itemRepository.findAll().stream().map(ItemResponseDto::new).toList();
     }
 
-    public ItemResponseDto getItem(Long itemId) {
-        return new ItemResponseDto(findItem(itemId));
+    public ItemResponseDto getItem(Long itemId, User user) {
+        Item item = findItem(itemId);
+        if(!item.getUser().getId().equals(user.getId())){
+            throw new IllegalArgumentException("회원님이 삭성하신 글만 상세조회가 가능합니다.");
+        }
+        return new ItemResponseDto(item);
     }
 
     public Page<ItemResponseDto> getItemsInfiniteScroll(int page, int size, boolean isAsc) {
