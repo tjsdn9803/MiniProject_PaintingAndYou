@@ -54,7 +54,6 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(AbstractHttpConfigurer::disable);
         // CSRF 설정
         http.csrf((csrf) -> csrf.disable());
 
@@ -74,8 +73,6 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.PUT).permitAll()
                         .requestMatchers(HttpMethod.PATCH).permitAll()
                         .requestMatchers(HttpMethod.DELETE).permitAll()
-
-
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
